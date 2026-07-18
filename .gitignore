@@ -1,0 +1,7 @@
+node_modules/
+coverage/
+graphify-out/
+.local-server.pid
+.DS_Store
+.env
+*.log

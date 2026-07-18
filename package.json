@@ -1,0 +1,40 @@
+{
+  "name": "smart-stadium-wc2026",
+  "version": "3.0.0",
+  "description": "AI-powered Smart Stadium Operations Platform for FIFA World Cup 2026. Multi-agent GenAI solution covering crowd management, navigation, accessibility, transport, sustainability, and real-time operational intelligence.",
+  "main": "sw.js",
+  "scripts": {
+    "test": "jest --forceExit",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage --forceExit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abdallahdalvi/smartstadium.git"
+  },
+  "keywords": [
+    "fifa", "world-cup-2026", "stadium", "ai", "genai", "crowd-management",
+    "accessibility", "navigation", "sustainability", "multi-agent"
+  ],
+  "author": "Abdallah Dalvi",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Abdallahdalvi/smartstadium/issues"
+  },
+  "homepage": "https://github.com/Abdallahdalvi/smartstadium#readme",
+  "devDependencies": {
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testEnvironmentOptions": {},
+    "testMatch": ["**/tests/**/*.test.js"],
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "js/*.js",
+      "!js/app.js"
+    ]
+  }
+}

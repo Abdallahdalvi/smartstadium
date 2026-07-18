@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>SmartStadium 2026 | FIFA World Cup AI Companion</title>
+  <meta name="description" content="AI-powered stadium companion for FIFA World Cup 2026. Real-time navigation, crowd intelligence, sustainability tracking, transport hub, and multilingual fan assistance.">
+  <meta name="theme-color" content="#0057b8">
+  <meta name="keywords" content="FIFA World Cup 2026, smart stadium, AI, fan companion, navigation, crowd management">
+
+  <!-- Open Graph / Social -->
+  <meta property="og:title" content="SmartStadium 2026 — FIFA World Cup AI Companion">
+  <meta property="og:description" content="GenAI-powered stadium experience for FIFA World Cup 2026 fans, staff, and organizers.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- PWA -->
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./img/icon-192.png">
+
+  <!-- Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- CSS (order matters) -->
+  <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="./css/components.css">
+  <link rel="stylesheet" href="./css/animations.css">
+  <link rel="stylesheet" href="./css/utilities.css">
+  <link rel="stylesheet" href="./css/fifa-2026.css">
+</head>
+
+<body>
+  <!-- Skip to content (accessibility) -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Stadium Background -->
+  <div class="stadium-bg" aria-hidden="true"></div>
+
+  <!-- App Loader -->
+  <div id="app-loader" class="app-loader" aria-label="Loading SmartStadium" role="status">
+    <div class="loader-spinner"></div>
+    <div class="loader-text gold-text font-outfit">Loading SmartStadium...</div>
+  </div>
+
+  <!-- Smart Notification Toast Container -->
+  <div id="notification-container" aria-live="polite" aria-label="Notifications" class="notification-container"></div>
+
+  <!-- Header -->
+  <header class="app-header" role="banner">
+    <h1 id="header-title" class="font-outfit"><span class="gold-text">Smart</span>Stadium</h1>
+    <div class="header-right">
+      <button id="notification-bell" class="btn-icon header-action" aria-label="Notifications" title="Notifications">
+        <span class="bell-icon">🔔</span>
+        <span id="notif-badge" class="notif-badge" hidden>3</span>
+      </button>
+      <button id="header-settings-btn" class="btn-icon header-action" aria-label="Open Settings">⚙️</button>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main id="main-content" class="app-main">
+
+    <!-- =====================================================================
+         HOME — AI Operations Dashboard
+         ===================================================================== -->
+    <section id="section-home" class="app-section active dashboard-page" aria-labelledby="home-heading">
+
+      <!-- Executive Header -->
+      <div class="dashboard-header">
+        <div class="dash-status-bar">
+          <span class="status-indicator status-live" aria-label="System live">
+            <span class="live-dot" aria-hidden="true"></span> LIVE
+          </span>
+          <span class="dash-venue-label">MetLife Stadium — East Rutherford, NJ</span>
+          <span class="dash-time" id="dash-clock" aria-live="polite"></span>
+        </div>
+        <h2 id="home-heading" class="section-title mt-sm mb-xs">Matchday Command Center</h2>
+        <p class="text-sm opacity-70">AI-powered operations for FIFA World Cup 2026 · USA·Canada·Mexico</p>
+      </div>
+
+      <!-- Live Venue Status -->
+      <div class="p-md pt-0">
+        <div class="card venue-status-card">
+          <div class="flex-between mb-sm">
+            <h3 class="card-title text-base-size">🏟️ Venue Status</h3>
+            <span class="tag live" data-i18n="home.matchDay">Match Day</span>
+          </div>
+          <div class="venue-status-grid">
+            <div class="venue-stat">
+              <span class="venue-stat-label">Capacity</span>
+              <span class="venue-stat-value text-gold" id="dash-capacity">72%</span>
+            </div>
+            <div class="venue-stat">
+              <span class="venue-stat-label">Weather</span>
+              <span class="venue-stat-value" id="dash-weather">🌤️ 78°F</span>
+            </div>
+            <div class="venue-stat">
+              <span class="venue-stat-label">Gates</span>
+              <span class="venue-stat-value text-success">OPEN</span>
+            </div>
+            <div class="venue-stat">
+              <span class="venue-stat-label">Threat Level</span>
+              <span class="venue-stat-value text-success">LOW</span>
+            </div>
+            <div class="venue-stat">
+              <span class="venue-stat-label">Air Quality</span>
+              <span class="venue-stat-value text-success">GOOD</span>
+            </div>
+            <div class="venue-stat">
+              <span class="venue-stat-label">WiFi</span>
+              <span class="venue-stat-value text-success">ONLINE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Digital Twin — Zone Occupancy Widget -->
+      <div class="p-md pt-0">
+        <div class="card card-padded">
+          <div class="flex-between mb-sm">
+            <h3 class="card-title text-base-size">🏟️ Digital Twin — Live Zone Occupancy</h3>
+            <span class="tag tag-ai">AI Model</span>
+          </div>
+          <div id="digital-twin-widget" class="digital-twin-grid" aria-label="Zone occupancy visualization">
+            <!-- Injected by app.js -->
+          </div>
+          <p class="text-sm mt-md text-secondary">
+            🔮 AI predicts <strong id="twin-prediction-text">crowd surge in ~38 min</strong> at concourses. Visit food stands <strong>now</strong> to avoid queues.
+          </p>
+        </div>
+      </div>
+
+      <!-- AI Insight Cards Grid -->
+      <div class="p-md pt-0">
+        <h2 class="section-title">Live Operations Insights</h2>
+        <p class="text-sm opacity-70 mb-sm">Actionable recommendations from crowd, transport, safety &amp; venue AI agents</p>
+        <div id="dashboard-insights" class="dashboard-insights-grid" role="region" aria-label="Live Operations Insights">
+          <!-- Insight cards injected by app.js -->
+        </div>
+      </div>
+
+      <!-- Quick Access Cards -->
+      <div class="p-md pt-0">
+        <h2 class="section-title">Quick Access</h2>
+        <div class="quick-access-grid mt-sm">
+          <div id="qa-navigate-card" class="card interactive card-gold"
+            role="button" tabindex="0" aria-label="Navigate to Find My Seat">
+            <div class="card-header mb-sm"><span class="nav-icon text-gold">🗺️</span></div>
+            <h3 class="card-title" data-i18n="home.findMySeat">Find My Seat</h3>
+            <p class="card-subtitle" data-i18n="home.interactiveMap">Interactive stadium map</p>
+          </div>
+          <div id="qa-tickets-card" class="card interactive card-accent"
+            role="button" tabindex="0" aria-label="Navigate to My Tickets">
+            <div class="card-header mb-sm"><span class="nav-icon text-accent">🎟️</span></div>
+            <h3 class="card-title" data-i18n="home.myTickets">My Tickets</h3>
+            <p class="card-subtitle" data-i18n="home.digitalWalletText">Digital wallet &amp; entry</p>
+          </div>
+          <div id="qa-sustainability-card" class="card interactive border-top-success"
+            role="button" tabindex="0" aria-label="Navigate to Sustainability">
+            <div class="card-header mb-sm"><span class="nav-icon">🌱</span></div>
+            <h3 class="card-title">Sustainability</h3>
+            <p class="card-subtitle">Green score &amp; eco-impact</p>
+          </div>
+          <div id="qa-crowd-card" class="card interactive border-top-warning"
+            role="button" tabindex="0" aria-label="Navigate to Crowd Intelligence">
+            <div class="card-header mb-sm"><span class="nav-icon">👥</span></div>
+            <h3 class="card-title">Crowd Intel</h3>
+            <p class="card-subtitle">Live heatmap &amp; predictions</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- =====================================================================
+         AI ASSISTANT
+         ===================================================================== -->
+    <section id="section-assistant" class="app-section" aria-labelledby="assistant-heading">
+      <div class="chat-container">
+        <!-- Category chips -->
+        <div class="chat-category-bar" role="navigation" aria-label="Quick category filters">
+          <button class="cat-chip active" data-query="navigate" aria-label="Navigation questions">🗺️ Navigate</button>
+          <button class="cat-chip" data-query="food" aria-label="Food questions">🍔 Food</button>
+          <button class="cat-chip" data-query="transport" aria-label="Transport questions">🚇 Transport</button>
+          <button class="cat-chip" data-query="sustainability" aria-label="Sustainability questions">🌱 Eco</button>
+          <button class="cat-chip" data-query="accessibility" aria-label="Accessibility questions">♿ Access</button>
+          <button class="cat-chip" data-query="emergency" aria-label="Safety questions">🚨 Safety</button>
+        </div>
+
+        <div id="chat-messages" class="chat-messages" role="log" aria-live="polite" aria-label="Chat conversation">
+          <!-- Messages injected here -->
+        </div>
+
+        <div class="chat-input-area">
+          <div id="chat-quick-replies" class="chat-quick-replies" role="group" aria-label="Quick reply suggestions">
+            <!-- Injected via app.js -->
+          </div>
+          <div class="chat-input-wrapper">
+            <button id="chat-voice-btn" class="btn-icon voice-btn" aria-label="Start voice input" title="Voice input">🎤</button>
+            <input type="text" id="chat-input" placeholder="Ask me anything about the stadium..."
+              data-i18n="chat.placeholder" autocomplete="off" aria-label="Chat message input" maxlength="500">
+            <button id="chat-send-btn" class="btn-icon send-btn" aria-label="Send message" title="Send">↗</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         NAVIGATE — Smart Wayfinding
+         ===================================================================== -->
+    <section id="section-navigate" class="app-section" aria-labelledby="navigate-heading">
+      <h2 id="navigate-heading" class="sr-only">Smart Navigation</h2>
+
+      <!-- Transport Hub Tab Bar -->
+      <div class="section-tabs-nav" role="tablist">
+        <button class="section-tab-btn active" role="tab" aria-selected="true"
+          data-tab="wayfinding" aria-controls="tab-wayfinding">🗺️ Wayfinding</button>
+        <button class="section-tab-btn" role="tab" aria-selected="false"
+          data-tab="transport" aria-controls="tab-transport">🚇 Transport Hub</button>
+      </div>
+
+      <!-- Wayfinding Tab -->
+      <div id="tab-wayfinding" role="tabpanel">
+        <!-- Filter Buttons -->
+        <div class="map-filter-bar" role="group" aria-label="Filter map markers">
+          <button class="map-filter-btn active" data-filter="all" aria-pressed="true">All</button>
+          <button class="map-filter-btn" data-filter="gates" aria-pressed="false">🚪 Gates</button>
+          <button class="map-filter-btn" data-filter="food" aria-pressed="false">🍔 Food</button>
+          <button class="map-filter-btn" data-filter="restroom" aria-pressed="false">🚻 Restroom</button>
+          <button class="map-filter-btn" data-filter="medical" aria-pressed="false">🏥 Medical</button>
+          <button class="map-filter-btn" data-filter="accessible" aria-pressed="false">♿ Access</button>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="map-search-bar">
+          <select id="nav-search" class="form-input" aria-label="Select a destination">
+            <option value="" disabled selected>Where do you want to go?</option>
+          </select>
+          <button id="nav-clear-route" class="btn btn-outline hidden-initial" aria-label="Clear route">✕ Clear</button>
+        </div>
+
+        <div id="nav-results" class="nav-results-container" role="status" aria-live="polite"></div>
+
+        <div class="map-container-wrapper">
+          <div id="svg-map-container" class="svg-map-container" aria-label="Interactive stadium map">
+            <!-- SVG Map injected here -->
+          </div>
+          <div id="nav-directions-panel" class="directions-panel" role="complementary" aria-label="Turn-by-turn directions">
+            <!-- Directions injected here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Transport Hub Tab -->
+      <div id="tab-transport" role="tabpanel" class="hidden-initial">
+        <div class="transport-hub-content p-md">
+          <h3 class="card-title mb-sm">🚇 Getting Here &amp; Getting Home</h3>
+
+          <!-- Leave Now Recommendation -->
+          <div class="card transport-card transport-recommend mb-md">
+            <div class="transport-icon">⏰</div>
+            <div class="transport-body">
+              <strong class="transport-label">AI Leave Recommendation</strong>
+              <p class="transport-desc" id="transport-leave-rec">Leave <strong>now</strong> via NJ Transit to arrive 45 min before kickoff with comfortable entry.</p>
+            </div>
+          </div>
+
+          <!-- Transport Options Grid -->
+          <div class="transport-options-grid">
+
+            <div class="card transport-card" id="transport-metro">
+              <div class="transport-icon">🚇</div>
+              <div class="transport-body">
+                <strong class="transport-label">NJ Transit Rail <span class="transport-badge green">RECOMMENDED</span></strong>
+                <p class="transport-desc">Penn Station → Meadowlands Station (direct, 20 min)</p>
+                <div class="transport-schedule">
+                  <span class="schedule-item">Next: <strong>14:22</strong></span>
+                  <span class="schedule-item">Then: <strong>14:37</strong></span>
+                  <span class="schedule-item">Then: <strong>14:52</strong></span>
+                </div>
+                <span class="transport-badge green">6 min walk to Gate A</span>
+              </div>
+            </div>
+
+            <div class="card transport-card" id="transport-bus">
+              <div class="transport-icon">🚌</div>
+              <div class="transport-body">
+                <strong class="transport-label">Express Bus</strong>
+                <p class="transport-desc">Port Authority Bus Terminal → Gate C (25–35 min)</p>
+                <div class="transport-schedule">
+                  <span class="schedule-item">Next: <strong>14:18</strong></span>
+                  <span class="schedule-item">Then: <strong>14:30</strong></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card transport-card" id="transport-parking">
+              <div class="transport-icon">🚗</div>
+              <div class="transport-body">
+                <strong class="transport-label">Parking</strong>
+                <p class="transport-desc">Lots A–F · Cashless only · Opens 4h before kickoff</p>
+                <div class="transport-parking-grid">
+                  <div class="parking-lot">
+                    <span class="lot-name">Lot A</span>
+                    <span class="lot-status text-danger">93% Full</span>
+                  </div>
+                  <div class="parking-lot">
+                    <span class="lot-name">Lot B</span>
+                    <span class="lot-status text-warning">71% Full</span>
+                  </div>
+                  <div class="parking-lot">
+                    <span class="lot-name">Lot C</span>
+                    <span class="lot-status text-success">44% Full</span>
+                  </div>
+                  <div class="parking-lot">
+                    <span class="lot-name">Lot A1 ♿</span>
+                    <span class="lot-status text-warning">Permit Req.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card transport-card" id="transport-rideshare">
+              <div class="transport-icon">🚕</div>
+              <div class="transport-body">
+                <strong class="transport-label">Rideshare (Uber / Lyft)</strong>
+                <p class="transport-desc">Pickup/dropoff: Lot B1 East (dedicated zone)</p>
+                <div class="transport-demand-bar">
+                  <span class="demand-label">Current Demand</span>
+                  <div class="demand-track">
+                    <div class="demand-fill demand-fill-initial"></div>
+                  </div>
+                  <span class="demand-label">High — ~12 min wait</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Post-Match Egress Planner -->
+            <div class="card transport-card transport-egress card-full-span">
+              <div class="transport-icon">🏁</div>
+              <div class="transport-body body-full">
+                <strong class="transport-label">AI Post-Match Egress Planner</strong>
+                <p class="transport-desc desc-spaced">Beat the crowd with AI-recommended exit strategy based on your seat location (Section 140).</p>
+                <div class="egress-timeline">
+                  <div class="egress-step">
+                    <span class="egress-dot egress-dot-success"></span>
+                    <div class="egress-info">
+                      <strong>75th min</strong>
+                      <span>Leave seat → head to Gate A concourse</span>
+                    </div>
+                  </div>
+                  <div class="egress-step">
+                    <span class="egress-dot egress-dot-warning"></span>
+                    <div class="egress-info">
+                      <strong>Final Whistle</strong>
+                      <span>Expect 15 min wait at Gate A — or use Gate B (shorter at 8 min)</span>
+                    </div>
+                  </div>
+                  <div class="egress-step">
+                    <span class="egress-dot egress-dot-info"></span>
+                    <div class="egress-info">
+                      <strong>+20 min</strong>
+                      <span>Meadowlands Station — rail departures every 8 min</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- =====================================================================
+         CROWD MANAGEMENT
+         ===================================================================== -->
+    <section id="section-crowd" class="app-section" aria-labelledby="crowd-heading">
+      <h2 id="crowd-heading" class="sr-only">Crowd Intelligence</h2>
+
+      <div class="heatmap-wrapper">
+        <canvas id="heatmap-canvas" class="heatmap-canvas" aria-label="Live crowd density heatmap" role="img"></canvas>
+        <div class="heatmap-overlay-info" aria-live="polite">
+          <span class="live-dot" aria-hidden="true"></span>
+          <span data-i18n="crowd.live">LIVE</span> Density
+        </div>
+      </div>
+
+      <div class="p-md">
+        <h2 class="section-title" data-i18n="crowd.predictionsTitle">AI Congestion Predictions</h2>
+        <p class="text-sm opacity-70 mb-sm">Updated every 30 seconds by the CrowdIntel AI Agent</p>
+        <div id="crowd-predictions" class="predictions-container" role="region" aria-live="polite">
+          <!-- Predictions injected here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         TICKETS & FAN EXPERIENCE
+         ===================================================================== -->
+    <section id="section-tickets" class="app-section" aria-labelledby="tickets-heading">
+      <h2 id="tickets-heading" class="sr-only">Tickets &amp; Fan Experience</h2>
+
+      <div class="tabs-nav" role="tablist">
+        <button class="tab-btn active" role="tab" id="tab-wallet-btn" aria-selected="true" aria-controls="tab-wallet"
+          data-i18n="tickets.walletTab">Wallet</button>
+        <button class="tab-btn" role="tab" id="tab-schedule-btn" aria-selected="false" aria-controls="tab-schedule"
+          data-i18n="tickets.scheduleTab">Schedule</button>
+        <button class="tab-btn" role="tab" id="tab-fanzone-btn" aria-selected="false" aria-controls="tab-fanzone"
+          data-i18n="tickets.fanZoneTab">Fan Zone</button>
+        <button class="tab-btn" role="tab" id="tab-journey-btn" aria-selected="false" aria-controls="tab-journey">
+          My Journey</button>
+      </div>
+
+      <div id="tab-wallet" class="tab-content visible-initial" role="tabpanel" aria-labelledby="tab-wallet-btn">
+        <div id="ticket-container" class="p-md"></div>
+      </div>
+
+      <div id="tab-schedule" class="tab-content hidden-initial" role="tabpanel" aria-labelledby="tab-schedule-btn">
+        <div id="schedule-container" class="p-md"></div>
+      </div>
+
+      <div id="tab-fanzone" class="tab-content hidden-initial" role="tabpanel" aria-labelledby="tab-fanzone-btn">
+        <div id="fanzone-container" class="p-md"></div>
+      </div>
+
+      <div id="tab-journey" class="tab-content hidden-initial" role="tabpanel" aria-labelledby="tab-journey-btn">
+        <div class="p-md">
+          <h3 class="card-title mb-sm">🎯 Your Personalized Fan Journey</h3>
+          <p class="text-sm opacity-70 mb-md">Ticket: Section 140, Row F, Seat 12 · USA vs Mexico · June 11, 2026</p>
+          <div id="fan-journey-container" class="fan-journey-timeline">
+            <!-- Injected by app.js -->
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- =====================================================================
+         SUSTAINABILITY
+         ===================================================================== -->
+    <section id="section-sustainability" class="app-section" aria-labelledby="sustainability-heading">
+      <h2 id="sustainability-heading" class="sr-only">Sustainability Dashboard</h2>
+      <div class="p-md">
+
+        <!-- Header -->
+        <div class="sustainability-hero">
+          <div class="sustain-hero-content">
+            <h2 class="section-title mb-sm">🌍 FIFA Green Goal 2026</h2>
+            <p class="text-sm opacity-70">Real-time sustainability metrics powered by stadium IoT sensors &amp; AI analysis</p>
+          </div>
+          <div class="green-score-badge" id="green-score-badge">
+            <span class="green-score-label">Green Score</span>
+            <span class="green-score-value" id="green-score-val">74</span>
+            <span class="green-score-unit">/100</span>
+          </div>
+        </div>
+
+        <!-- Main Metrics Grid -->
+        <div class="sustain-metrics-grid">
+
+          <div class="card sustain-metric-card">
+            <div class="sustain-metric-icon">⚡</div>
+            <div class="sustain-metric-body">
+              <span class="sustain-metric-label">Energy Use</span>
+              <span class="sustain-metric-value" id="sustain-energy">2,847 kWh</span>
+              <div class="sustain-bar-wrap">
+                <div class="sustain-bar"><div class="sustain-bar-fill bar-energy-initial" id="sustain-energy-bar"></div></div>
+              </div>
+              <span class="sustain-metric-sub text-success">↓ 18% vs. last match</span>
+            </div>
+          </div>
+
+          <div class="card sustain-metric-card">
+            <div class="sustain-metric-icon">💧</div>
+            <div class="sustain-metric-body">
+              <span class="sustain-metric-label">Water Consumption</span>
+              <span class="sustain-metric-value" id="sustain-water">48,200 L</span>
+              <div class="sustain-bar-wrap">
+                <div class="sustain-bar"><div class="sustain-bar-fill bar-water-initial" id="sustain-water-bar"></div></div>
+              </div>
+              <span class="sustain-metric-sub text-success">↓ 12% vs. 2022 avg</span>
+            </div>
+          </div>
+
+          <div class="card sustain-metric-card">
+            <div class="sustain-metric-icon">♻️</div>
+            <div class="sustain-metric-body">
+              <span class="sustain-metric-label">Waste Diverted</span>
+              <span class="sustain-metric-value" id="sustain-waste">76%</span>
+              <div class="sustain-bar-wrap">
+                <div class="sustain-bar"><div class="sustain-bar-fill bar-waste-initial" id="sustain-waste-bar"></div></div>
+              </div>
+              <span class="sustain-metric-sub text-warning">Target: 80% · Keep going!</span>
+            </div>
+          </div>
+
+          <div class="card sustain-metric-card">
+            <div class="sustain-metric-icon">🌿</div>
+            <div class="sustain-metric-body">
+              <span class="sustain-metric-label">Carbon Offset Today</span>
+              <span class="sustain-metric-value" id="sustain-carbon">124 tCO₂</span>
+              <div class="sustain-bar-wrap">
+                <div class="sustain-bar"><div class="sustain-bar-fill bar-carbon-initial" id="sustain-carbon-bar"></div></div>
+              </div>
+              <span class="sustain-metric-sub text-success">83% of daily target met</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Fan Carbon Impact -->
+        <div class="card card-spaced">
+          <h3 class="card-title mb-sm">🌱 Your Personal Carbon Impact</h3>
+          <p class="text-sm opacity-70 mb-md">Based on your transport method to the stadium</p>
+          <div class="carbon-options-grid">
+            <div class="carbon-option selected" id="co-metro">
+              <span class="carbon-option-icon">🚇</span>
+              <span class="carbon-option-label">Metro</span>
+              <span class="carbon-option-value text-success">0.8 kg CO₂</span>
+            </div>
+            <div class="carbon-option" id="co-car">
+              <span class="carbon-option-icon">🚗</span>
+              <span class="carbon-option-label">Car (solo)</span>
+              <span class="carbon-option-value text-danger">12.4 kg CO₂</span>
+            </div>
+            <div class="carbon-option" id="co-carpool">
+              <span class="carbon-option-icon">🚗👥</span>
+              <span class="carbon-option-label">Carpool 4</span>
+              <span class="carbon-option-value text-warning">3.1 kg CO₂</span>
+            </div>
+            <div class="carbon-option" id="co-walk">
+              <span class="carbon-option-icon">🚶</span>
+              <span class="carbon-option-label">Walk / Bike</span>
+              <span class="carbon-option-value text-success">0.0 kg CO₂</span>
+            </div>
+          </div>
+          <p class="text-sm sustain-carbon-tip">
+            💡 <strong>AI Tip:</strong> By using the Metro today instead of driving, you've saved approximately <strong>11.6 kg of CO₂</strong> — equivalent to planting 1 tree!
+          </p>
+        </div>
+
+        <!-- Sustainability Actions -->
+        <div class="card card-spaced">
+          <h3 class="card-title mb-sm">✅ Green Actions — Earn Points!</h3>
+          <div class="green-actions-list">
+            <div class="green-action completed">
+              <span class="green-action-check">✅</span>
+              <div class="green-action-text">
+                <strong>Used public transport</strong>
+                <span class="text-sm opacity-70">+20 Green Points</span>
+              </div>
+            </div>
+            <div class="green-action">
+              <span class="green-action-check">⬜</span>
+              <div class="green-action-text">
+                <strong>Use a reusable cup at concessions</strong>
+                <span class="text-sm opacity-70">+10 Green Points (ask staff)</span>
+              </div>
+            </div>
+            <div class="green-action">
+              <span class="green-action-check">⬜</span>
+              <div class="green-action-text">
+                <strong>Sort your waste correctly (3 bins)</strong>
+                <span class="text-sm opacity-70">+5 Green Points per bin</span>
+              </div>
+            </div>
+            <div class="green-action">
+              <span class="green-action-check">⬜</span>
+              <div class="green-action-text">
+                <strong>Refill at a free water station (not buy a bottle)</strong>
+                <span class="text-sm opacity-70">+5 Green Points</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         EMERGENCY & SAFETY
+         ===================================================================== -->
+    <section id="section-emergency" class="app-section" aria-labelledby="emergency-heading">
+      <h2 id="emergency-heading" class="sr-only">Emergency &amp; Safety</h2>
+
+      <div class="p-md text-center">
+        <p class="text-sm opacity-70 mb-lg" data-i18n="emergency.subtitle">Your safety is our priority.</p>
+        <button id="sos-btn" class="sos-btn" aria-label="Hold for 2 seconds to activate SOS Emergency">
+          <span class="sos-text">SOS</span>
+          <span class="sos-label" data-i18n="emergency.sosLabel">HOLD 2 SEC FOR EMERGENCY</span>
+        </button>
+      </div>
+
+      <!-- Accessibility Services Card -->
+      <div class="p-md pt-0">
+        <h2 class="section-title">♿ Accessibility Services</h2>
+        <div class="card card-padded">
+          <div class="accessibility-grid">
+            <div class="access-item">
+              <span class="access-icon">🛗</span>
+              <div>
+                <strong>Elevators</strong>
+                <p class="text-sm opacity-70">All 4 gates — priority wheelchair access</p>
+              </div>
+            </div>
+            <div class="access-item">
+              <span class="access-icon">👂</span>
+              <div>
+                <strong>Hearing Loops</strong>
+                <p class="text-sm opacity-70">T-coil compatible throughout venue</p>
+              </div>
+            </div>
+            <div class="access-item">
+              <span class="access-icon">🐕</span>
+              <div>
+                <strong>Guide Dogs Welcome</strong>
+                <p class="text-sm opacity-70">All areas — water bowls available at gates</p>
+              </div>
+            </div>
+            <div class="access-item">
+              <span class="access-icon">🤫</span>
+              <div>
+                <strong>Quiet Room</strong>
+                <p class="text-sm opacity-70">Section 115 — sensory-friendly space</p>
+              </div>
+            </div>
+            <div class="access-item">
+              <span class="access-icon">👶</span>
+              <div>
+                <strong>Family Lounge</strong>
+                <p class="text-sm opacity-70">Section 115 — nursing room &amp; changing tables</p>
+              </div>
+            </div>
+            <div class="access-item">
+              <span class="access-icon">📞</span>
+              <div>
+                <strong>Accessibility Hotline</strong>
+                <p class="text-sm opacity-70">+1-800-FIFA-ACC (open match day)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-md pt-0">
+        <h2 class="section-title" data-i18n="emergency.contacts">Emergency Contacts</h2>
+        <div id="contacts-container" class="mb-lg"></div>
+
+        <h2 class="section-title" data-i18n="emergency.lostFound">Lost &amp; Found</h2>
+        <div class="card card-padded">
+          <form id="lost-found-form" class="form-container" novalidate>
+            <select id="lf-type" class="form-input" required aria-label="Select issue type">
+              <option value="" disabled selected data-i18n="emergency.selectIssue">Select issue type...</option>
+              <option value="lost-item" data-i18n="emergency.reportItem">Report Lost Item</option>
+              <option value="found-item" data-i18n="emergency.reportFoundItem">Report Found Item</option>
+              <option value="lost-child" data-i18n="emergency.lostChild">Missing Child (URGENT)</option>
+            </select>
+            <textarea id="lf-desc" class="form-input" rows="3"
+              placeholder="Describe the item or person in detail..."
+              data-i18n="emergency.describeItem" required aria-label="Description of lost or found item"></textarea>
+            <button type="submit" class="btn btn-primary w-full" data-i18n="emergency.submit">Submit Report</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =====================================================================
+       BOTTOM NAVIGATION
+       ===================================================================== -->
+  <nav class="app-bottom-nav" role="navigation" aria-label="Main navigation">
+    <button class="nav-btn active" data-target="home" aria-label="Home dashboard">
+      <div class="nav-icon" aria-hidden="true">🏠</div>
+      <span data-i18n="nav.home">Home</span>
+    </button>
+    <button class="nav-btn" data-target="navigate" aria-label="Navigate stadium">
+      <div class="nav-icon" aria-hidden="true">🗺️</div>
+      <span data-i18n="nav.navigate">Navigate</span>
+    </button>
+    <button class="nav-btn chat-fab-wrapper" data-target="assistant" aria-label="AI Assistant">
+      <div class="nav-icon chat-fab" aria-hidden="true">✨</div>
+      <span data-i18n="nav.assistant">AI</span>
+    </button>
+    <button class="nav-btn" data-target="crowd" aria-label="Crowd intelligence">
+      <div class="nav-icon" aria-hidden="true">👥</div>
+      <span data-i18n="nav.crowd">Crowd</span>
+    </button>
+    <button class="nav-btn" data-target="tickets" aria-label="Tickets and fan zone">
+      <div class="nav-icon" aria-hidden="true">🎟️</div>
+      <span data-i18n="nav.tickets">Tickets</span>
+    </button>
+    <button class="nav-btn" data-target="sustainability" aria-label="Sustainability dashboard">
+      <div class="nav-icon" aria-hidden="true">🌱</div>
+      <span>Green</span>
+    </button>
+    <button class="nav-btn emergency" data-target="emergency" aria-label="Emergency and safety">
+      <div class="nav-icon" aria-hidden="true">🚨</div>
+      <span data-i18n="nav.emergency">SOS</span>
+    </button>
+  </nav>
+
+  <!-- =====================================================================
+       EMERGENCY OVERLAY
+       ===================================================================== -->
+  <div id="emergency-overlay" class="emergency-overlay" role="alertdialog" aria-modal="true"
+    aria-labelledby="emergency-overlay-title" aria-describedby="emergency-overlay-message">
+    <div class="emergency-overlay-content">
+      <div id="emergency-overlay-icon" class="eo-icon" aria-hidden="true">⚠️</div>
+      <h2 id="emergency-overlay-title" data-i18n="emergency.alertTitle">ALERT</h2>
+      <p id="emergency-overlay-message" data-i18n="emergency.alertMessage">Follow staff instructions immediately.</p>
+      <button id="emergency-ack-btn" class="btn btn-outline mt-lg"
+        data-i18n="common.acknowledge">Acknowledge</button>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       SETTINGS MODAL
+       ===================================================================== -->
+  <div id="settings-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="settings-title" data-i18n="settings.title">Settings</h2>
+        <button id="settings-close-btn" class="btn-icon" aria-label="Close settings">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="setting-item">
+          <label for="lang-select" data-i18n="settings.language">Language</label>
+          <select id="lang-select" class="form-input"></select>
+        </div>
+        <div class="setting-item">
+          <label for="high-contrast-toggle" data-i18n="settings.highContrast">High Contrast Mode</label>
+          <label class="toggle-switch">
+            <input type="checkbox" id="high-contrast-toggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="setting-item">
+          <label for="reduce-motion-toggle" data-i18n="settings.reduceMotion">Reduce Motion</label>
+          <label class="toggle-switch">
+            <input type="checkbox" id="reduce-motion-toggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="setting-item">
+          <label for="font-size-select">Text Size</label>
+          <select id="font-size-select" class="form-input">
+            <option value="medium" selected>Medium (Default)</option>
+            <option value="large">Large</option>
+            <option value="xl">Extra Large</option>
+            <option value="small">Small</option>
+          </select>
+        </div>
+        <div class="setting-item">
+          <label for="notifications-toggle">Smart Notifications</label>
+          <label class="toggle-switch">
+            <input type="checkbox" id="notifications-toggle" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       SCRIPTS
+       ===================================================================== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"
+    integrity="sha512-H+rglffZ6f5gF7UJgvH4Naa+fGCgjrHKMgoFOGmcPTRwR6oILo5R+gtzNrpDp7iMV3udbymBVjkeZGNz1Em6A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="./js/utils.js"></script>
+  <script src="./js/knowledge-base.js"></script>
+  <script src="./js/i18n.js"></script>
+  <script src="./js/ai-engine.js"></script>
+  <script src="./js/wayfinding.js"></script>
+  <script src="./js/heatmap.js"></script>
+  <script src="./js/tickets.js"></script>
+  <script src="./js/emergency.js"></script>
+  <script src="./js/sustainability.js"></script>
+  <script src="./js/notifications.js"></script>
+  <script src="./js/app.js"></script>
+
+</body>
+</html>
